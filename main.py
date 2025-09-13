@@ -5,6 +5,7 @@ import torch
 import torch.nn as nn
 from sklearn.preprocessing import StandardScaler
 from torch.utils.data import TensorDataset, DataLoader
+import matplotlib.pyplot as plt
 
 # Download Apple stock data and create features
 data = yf.download("AAPL", start="2015-01-01", end="2024-01-01", auto_adjust=True)
@@ -107,3 +108,16 @@ cumulative = (1 + strategy_returns).cumprod()
 # Compute Sharpe ratio
 sharpe = (strategy_returns.mean() / strategy_returns.std()) * np.sqrt(252)
 print(f"Sharpe Ratio: {sharpe:.2f}")
+
+# Plot strategy vs buy-and-hold cumulative returns
+buy_hold = (1 + returns).cumprod()
+
+plt.figure(figsize=(10, 5))
+plt.plot(cumulative, label="Strategy")
+plt.plot(buy_hold, label="Buy & Hold", linestyle="--")
+plt.title("Cumulative Returns")
+plt.xlabel("Days")
+plt.ylabel("Cumulative Return")
+plt.legend()
+plt.grid(True)
+plt.show()
